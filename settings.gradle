@@ -1,0 +1,6 @@
+rootProject.name = 'teavm-libgdx'
+
+include 'controllers'
+include 'core'
+include 'demos:invaders:core'
+include 'demos:invaders:webapp'

@@ -1,0 +1,43 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
+
+    dependencies {
+        classpath 'com.github.winniehell-forks:teavm-gradle-plugin:master-SNAPSHOT'
+    }
+}
+
+
+apply plugin: 'war'
+apply plugin: 'com.edibleday.teavm'
+
+dependencies {
+    compile project(':demos:invaders:core')
+    compile project(':core')
+    compile project(':controllers')
+}
+
+mainClassName = 'org.teavm.libgdx.invaders.TeaVMLauncher'
+
+Map<String, String> teavmcProperties = new HashMap<String, String>()
+teavmcProperties.put('teavm.libgdx.genAssetsDirectory', "${project.buildDir}/generated/assets".toString())
+teavmcProperties.put('teavm.libgdx.warAssetsDirectory', "${project.projectDir}/src/main/webapp/assets".toString())
+teavmcProperties.put('teavm.libgdx.fsJsonPath', "${project.buildDir}/generated/filesystem.json".toString())
+
+teavmc {
+    installDirectory "${project.buildDir}/teavm/teavm"
+    targetFileName 'classes.js'
+    customProperties teavmcProperties
+}
+
+war {
+    from 'target/teavm'
+}
+
+// fix dependencies to include TeaVM files in WAR
+teavmc.dependsOn.remove('build')
+teavmc.dependsOn compileJava
+war.dependsOn teavmc

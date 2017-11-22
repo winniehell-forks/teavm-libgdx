@@ -1,0 +1,14 @@
+allprojects {
+    ext {
+        gdxVersion = '1.5.3'
+        jacksonVersion = '2.5.0'
+        teavmVersion = '0.5.1'
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    buildDir = "$projectDir/target/"
+}
